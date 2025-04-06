@@ -1,0 +1,67 @@
+// Basic Express.js backend to handle chatbot messages and log them like a nosy librarian
+// Reminder: Replace OPENAI_API_KEY with your actual key
+
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import fetch from "node-fetch"; // Required for Node versions that don’t support fetch natively
+import fs from "fs";
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "your-api-key-here";
+
+// Log conversations locally for questionable analytics purposes
+function logConversation(userMessage, botResponse) {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    userMessage,
+    botResponse
+  };
+
+  fs.appendFileSync("chat_logs.json", JSON.stringify(logEntry) + "\n");
+}
+
+app.post("/api/message", async (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: "No message provided." });
+  }
+
+  try {
+    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: "You are a wildly confident AI who makes outlandish predictions and promises impossible results." },
+          { role: "user", content: message },
+        ],
+        temperature: 1.2,
+        max_tokens: 300,
+      }),
+    });
+
+    const data = await openaiRes.json();
+    const botReply = data.choices?.[0]?.message?.content || "Oops, the AI blacked out.";
+
+    logConversation(message, botReply);
+    res.json({ reply: botReply });
+  } catch (err) {
+    console.error("API error:", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Hallucination engine running at http://localhost:${PORT}`);
+});
