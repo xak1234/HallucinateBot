@@ -1,0 +1,27 @@
+# Node
+node_modules/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+*.env.*
+.envrc
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS Gremlins
+.DS_Store
+Thumbs.db
+
+# IDE Sludge
+.vscode/
+.idea/
+
+# Testing Junk
+coverage/
+*.test.js
