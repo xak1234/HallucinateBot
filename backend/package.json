@@ -1,0 +1,19 @@
+{
+  "name": "hallucinatebot-backend",
+  "version": "1.0.0",
+  "description": "Backend for HallucinateBot, the world's most confident liar.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.12"
+  },
+  "keywords": ["ai", "chatbot", "hallucination", "nonsense"],
+  "author": "Definitely Not An Evil Overlord",
+  "license": "MIT"
+}
