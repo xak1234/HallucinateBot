@@ -1,0 +1,16 @@
+# Dependency directory
+node_modules/
+
+# Environment variable files
+.env
+.env.*
+
+# Log files
+chat_logs.json
+*.log
+
+# OS & Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
